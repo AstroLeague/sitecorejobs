@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>7.3</LangVersion>
+    <RootNamespace>SitecoreJobs.Foundation</RootNamespace>
+    <AssemblyName>SitecoreJobs.Foundation</AssemblyName>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Sitecore.Kernel" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="App_Config\Include\Foundation\SitecoreJobs.Foundation.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>SitecoreJobs.Foundation.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+</Project>

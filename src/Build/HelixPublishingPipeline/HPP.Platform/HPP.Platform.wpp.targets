@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <!--
+        Use the SitecoreAssemblies ItemGroup provided by the Sitecore.Assemblies.Platform
+        package in order to prevent built-in Sitecore assemblies from publishing.
+        https://doc.sitecore.com/developers/93/sitecore-experience-manager/en/sitecore-assembly-list-nuget-packages.html
+
+        Delay executing this target until after Compile in order to
+        ensure the NuGet package targets have been evaluated.
+     -->
+    <Target Name="ExcludeSitecoreAssemblies" AfterTargets="Compile">
+	    <ItemGroup>
+			<SitecoreAssembliesToExclude Include="HPP.Platform.dll" />
+			
+		    <SitecoreAssembliesToExclude Include="Microsoft.Owin.dll" />
+		    <SitecoreAssembliesToExclude Include="System.Buffers.dll" />
+		    <SitecoreAssembliesToExclude Include="Sitecore.Buckets.Client.dll" />
+		    <SitecoreAssembliesToExclude Include="Sitecore.Buckets.dll" />
+		    <SitecoreAssembliesToExclude Include="Sitecore.Client.dll" />
+		    <SitecoreAssembliesToExclude Include="System.Memory.dll" />
+		    <SitecoreAssembliesToExclude Include="System.Numerics.Vectors.dll" />
+		    <SitecoreAssembliesToExclude Include="System.Web.Helpers.dll" />
+		    <SitecoreAssembliesToExclude Include="System.Web.Razor.dll" />
+		    <SitecoreAssembliesToExclude Include="System.Web.WebPages.Deployment.dll" />
+		    <SitecoreAssembliesToExclude Include="System.Web.WebPages.dll" />
+		    <SitecoreAssembliesToExclude Include="System.Web.WebPages.Razor.dll" />
+
+		    <SitecoreAssembliesToExclude Include="Sitecore.Framework.Caching.Diagnostics.dll" />
+		    <SitecoreAssembliesToExclude Include="Sitecore.Framework.Caching.dll" />
+		    <SitecoreAssembliesToExclude Include="Sitecore.Framework.Caching.Memory.dll" />
+		    <SitecoreAssembliesToExclude Include="Sitecore.Framework.Caching.Redis.dll" />
+		    <SitecoreAssembliesToExclude Include="Sitecore.Framework.Common.MatchingOptions.dll" />
+		    <SitecoreAssembliesToExclude Include="Sitecore.Framework.Diagnostics.Abstractions.dll" />
+		    <SitecoreAssembliesToExclude Include="Sitecore.Framework.Diagnostics.dll" />
+			
+		    <SitecoreAssembliesToExclude Include="@(SitecoreAssemblies)" />
+			
+		    <SitecoreAssembliesToExclude Include="IdentityModel.dll" />
+            <SitecoreAssembliesToExclude Include="Sitecore.LayoutService" />
+			
+		    <ExcludeFromPackageFiles Include="@(SitecoreAssemblies -> 'bin\%(Filename)%(Extension)')" />
+		    <ExcludeFromPackageFiles Include="@(SitecoreAssemblies -> 'bin\%(Filename).pdb')" />
+		    <ExcludeFromPackageFiles Include="@(SitecoreAssemblies -> 'bin\%(Filename).xml')" />
+	    </ItemGroup>
+    </Target>
+	    
+    <PropertyGroup>
+        <AutoPublish Condition="'$(AutoPublish)' == '' and '$(PublishProfile)' != ''">true</AutoPublish>
+
+        <AutoPublishDependsOn Condition="'$(AutoPublish)' == 'true'">
+            $(AutoPublishDependsOn);
+            WebPublish
+        </AutoPublishDependsOn>
+    </PropertyGroup>
+
+    <Target Name="AutoPublish" AfterTargets="Build" DependsOnTargets="$(AutoPublishDependsOn)">
+    </Target>
+
+    <!-- cleaning up folder KEEP 1st
+    <Target Name="Cleanup folder" AfterTargets="Build" DependsOnTargets="AutoPublish" Condition="'$(Configuration)' == 'Debug' and '$(BuildingInsideVisualStudio)' == 'true'">
+        <Exec Command="echo cleaning deploy folder..." />
+        <Exec Command="del /S /Q &quot;$(MSBuildThisFileDirectory)..\..\..\..\docker\deploy\website\&quot;" />
+    </Target>  -->
+
+    <!-- Coveo Local Developer Configs
+    <Target Name="CoveoConfigs" AfterTargets="Build" DependsOnTargets="AutoPublish" Condition="'$(Configuration)' == 'Debug' and '$(BuildingInsideVisualStudio)' == 'true'">
+        <Exec Command="echo Applying Coveo configs..." />
+        <Exec Command="xcopy /i /f /y &quot;$(MSBuildThisFileDirectory)..\..\..\..\docker\coveo\*.config&quot; &quot;$(MSBuildThisFileDirectory)..\..\..\..\docker\deploy\website\App_Config\Include\Coveo&quot;" />
+    </Target> -->
+
+    <!-- Sitecore Hotfixes
+    <Target Name="SitecoreHotfixes" AfterTargets="Build" DependsOnTargets="AutoPublish" Condition="'$(Configuration)' == 'Debug' and '$(BuildingInsideVisualStudio)' == 'true'">    
+        <Exec Command="echo Applying Sitecore Hotfixes..." />
+        <Exec Command="xcopy /i /f /y &quot;$(MSBuildThisFileDirectory)..\..\..\..\hotfixes\FolderNameHere&quot; &quot;$(MSBuildThisFileDirectory)..\..\..\..\docker\deploy\website\bin&quot;" />
+    </Target> -->
+
+    <!-- Creative Exchange Live Auto Sync on Build
+    <Target Name="PushLatestCssJsScriban" AfterTargets="Build" DependsOnTargets="SitecoreHotfixes" Condition="'$(Configuration)' == 'Debug' and '$(BuildingInsideVisualStudio)' == 'true'">
+        <Exec Command="echo Optimizing FED Assets..." />
+        <Exec Command="docker ps | findstr &quot;NFPA_cm_1&quot; &amp;&amp; powershell.exe –command &quot;&amp; { $(MSBuildThisFileDirectory)..\..\..\..\Sync-Assets.ps1 '$(MSBuildThisFileDirectory)..\..\..\..\' }&quot; || EXIT 0" />        
+    </Target> -->
+</Project>

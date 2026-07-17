@@ -1,0 +1,78 @@
+﻿# may contain OAuth secrets, do not commit
+.sitecore/user.json
+
+# NuGet cache for Sitecore CLI
+.sitecore/package-cache/
+
+# Ephemeral index caches used by serialization, do not commit
+.scindex
+
+# Don't commit packages
+*.itempackage
+*.sicpackage
+
+#Ignore thumbnails created by Windows
+Thumbs.db
+#Ignore files built by Visual Studio
+*.obj
+*.exe
+*.pdb
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.cache
+*.ilk
+*.log
+[Bb]in
+[Dd]ebug*/
+*.lib
+*.sbr
+obj/
+[Rr]elease*/
+_ReSharper*/
+[Tt]est[Rr]esult*
+.vs/
+#Nuget packages folder
+packages/
+/license/license.xml
+
+# Local Docker environment and runtime data
+.env
+*.env
+!.env.example
+!*.env.example
+/docker/.env
+/docker/.env.*
+!/docker/.env.example
+/docker/data/**
+!/docker/data/
+!/docker/data/**/
+!/docker/data/**/.gitkeep
+/docker/deploy/**
+!/docker/deploy/
+!/docker/deploy/**/
+!/docker/deploy/**/.gitkeep
+/docker/mssql-data/
+/docker/solr-data/
+/docker/traefik/certs/*.pem
+/docker/traefik/certs/*.key
+/docker/traefik/certs/*.pfx
+/docker/traefik/certs/mkcert.exe
+/docker/build/mssql-init/coveo-assets/
+
+# Additional Visual Studio/build output patterns
+Desktop.ini
+*.userosscache
+*.sln.docstates
+**/[Bb]in/
+**/[Oo]bj/
+**/[Dd]ebug*/
+**/[Rr]elease*/

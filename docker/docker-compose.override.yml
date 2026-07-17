@@ -1,0 +1,118 @@
+# Docker compose V2
+services:
+  solution:
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-solution:${VERSION:-latest}
+    build:
+      context: ..
+      args:
+        BUILD_CONFIGURATION: ${BUILD_CONFIGURATION}
+        BUILD_IMAGE: mcr.microsoft.com/dotnet/framework/sdk:4.8-windowsservercore-ltsc2019
+    deploy:
+      replicas: 0
+    networks:
+      default:
+        ipv4_address: ${SOLUTION_IP}
+
+  cm:
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-xm1-cm:${VERSION:-latest}
+    build:
+      context: ./build/cm
+      args:
+        PARENT_IMAGE: ${SITECORE_DOCKER_REGISTRY}sitecore-xm1-cm:${SITECORE_VERSION}
+        SOLUTION_IMAGE: ${REGISTRY}${COMPOSE_PROJECT_NAME}-solution:${VERSION:-latest}
+        TOOLS_IMAGE: ${TOOLS_IMAGE}
+        MANAGEMENT_SERVICES_IMAGE: ${MANAGEMENT_SERVICES_IMAGE}
+        SPE_RESOURCES_IMAGE: ${SPE_ASSETS_IMAGE}
+        SXA_RESOURCES_IMAGE: ${SXA_ASSETS_IMAGE}
+    depends_on:
+      - solution
+    ports:
+      - "14880:80"
+    volumes:
+      - ${LOCAL_DEPLOY_PATH}\platform:C:\deploy
+      - ${LOCAL_DATA_PATH}\cm:C:\inetpub\wwwroot\App_Data\logs
+      - ${HOST_LICENSE_FOLDER}:c:\license
+    environment:
+      SITECORE_LICENSE_LOCATION: c:\license\license.xml
+      SITECORE_DEVELOPMENT_PATCHES: DevEnvOn,CustomErrorsOff,HttpErrorsDetailed,DebugOn,DiagnosticsOff,InitMessagesOff,RobotDetectionOff
+      Sitecore_AppSettings_exmEnabled:define: "no"
+    entrypoint: powershell.exe -Command "& C:\\tools\\entrypoints\\iis\\Development.ps1"
+    networks:
+      default:
+        ipv4_address: ${CM_IP}
+
+  mssql-init:
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-xm1-mssql-init:${VERSION:-latest}
+    build:
+      context: ./build/mssql-init
+      args:
+        PARENT_IMAGE: ${SITECORE_DOCKER_REGISTRY}sitecore-xm1-mssql-init:${SITECORE_VERSION}
+        SPE_RESOURCES_IMAGE: ${SPE_ASSETS_IMAGE}
+    networks:
+      default:
+        ipv4_address: ${MSSQL_INIT_IP}
+
+  traefik:
+    volumes:
+      - ./traefik:C:/etc/traefik
+    networks:
+      default:
+        ipv4_address: ${TRAEFIK_IP}
+
+  redis:
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-redis:${VERSION:-latest}
+    build:
+      context: ./build/redis
+      args:
+        PARENT_IMAGE: ${SITECORE_DOCKER_REGISTRY}redis:3.2.100-${EXTERNAL_IMAGE_TAG_SUFFIX}
+    networks:
+      default:
+        ipv4_address: ${REDIS_IP}
+
+  mssql:
+    volumes:
+      - type: bind
+        source: ${LOCAL_DATA_PATH}\sql
+        target: c:\data
+    networks:
+      default:
+        ipv4_address: ${MSSQL_IP}
+
+  solr:
+    volumes:
+      - type: bind
+        source: ${LOCAL_DATA_PATH}\solr
+        target: c:\data
+    networks:
+      default:
+        ipv4_address: ${SOLR_IP}
+
+  solr-init:
+    image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-xm1-solr-init:${VERSION:-latest}
+    build:
+      context: ./build/solr-init
+      args:
+        PARENT_IMAGE: ${SITECORE_DOCKER_REGISTRY}sitecore-xm1-solr-init:${SITECORE_VERSION}
+        SXA_RESOURCES_IMAGE: ${SXA_ASSETS_IMAGE}
+    networks:
+      default:
+        ipv4_address: ${SOLR_INIT_IP}
+
+  id:
+    volumes:
+      - ${HOST_LICENSE_FOLDER}:c:\license
+    environment:
+      SITECORE_LICENSE_LOCATION: c:\license\license.xml
+    networks:
+      default:
+        ipv4_address: ${ID_IP}
+
+networks:
+  default:
+    name: ${LOCAL_NETWORK_NAME}
+    driver: nat
+    ipam:
+      config:
+        - subnet: ${LOCAL_NETWORK_SUBNET}
+          gateway: ${LOCAL_NETWORK_GATEWAY}
+
