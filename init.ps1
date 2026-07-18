@@ -43,10 +43,10 @@ Install-SitecoreDockerTools "10.2.7"
 
 Write-Host
 Write-Host "Removing existing certs..." -ForegroundColor Green
-Show-Command "Remove-Item -Path `"$PWD\docker\traefik\certs\*.pem`" -Force"
-Remove-Item -Path "$PWD\docker\traefik\certs\*.pem" -Force
+Show-Command "Remove-Item -Path `"$PWD\docker\infrastructure\traefik\certs\*.pem`" -Force"
+Remove-Item -Path "$PWD\docker\infrastructure\traefik\certs\*.pem" -Force -ErrorAction SilentlyContinue
 
-Push-Location docker\traefik\certs
+Push-Location docker\infrastructure\traefik\certs
 try {
     $mkcert = ".\mkcert.exe"
     if ($null -ne (Get-Command mkcert.exe -ErrorAction SilentlyContinue)) {

@@ -1,4 +1,4 @@
-﻿# escape=`
+# escape=`
 
 # This Dockerfile will build the Sitecore solution and save the build artifacts for use in
 # the CM image. It does not produce a runnable application image itself.

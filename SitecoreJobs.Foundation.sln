@@ -9,6 +9,88 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SitecoreJobs.Foundation", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SitecoreJobs.Foundation.Tests", "tests\SitecoreJobs.Foundation.Tests\SitecoreJobs.Foundation.Tests.csproj", "{533B37E4-764C-4DCA-B53C-D86319A58643}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{8F392D03-A5FB-2796-EA84-D3F6243993F8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HelixPublishingPipeline", "HelixPublishingPipeline", "{B6483905-3241-FE94-0DA0-C6B47A025D91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HPP.Platform", "src\Build\HelixPublishingPipeline\HPP.Platform\HPP.Platform.csproj", "{D5EF6227-0F80-4F47-9594-EFA7A250E27C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{E44D53A3-B81D-4EC2-9D27-0723357408D4}"
+	ProjectSection(SolutionItems) = preProject
+		docker\.env.example = docker\.env.example
+		docker\README.md = docker\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Compose", "Compose", "{2C7D4C23-B2E2-4F36-8F63-3325F8F7C0BC}"
+	ProjectSection(SolutionItems) = preProject
+		docker\docker-compose.override.yml = docker\docker-compose.override.yml
+		docker\docker-compose.yml = docker\docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{DB88D69A-0A34-43E7-A0BC-4E21B8E46430}"
+	ProjectSection(SolutionItems) = preProject
+		docker\build\README.md = docker\build\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CM", "CM", "{3E7A0724-8930-4075-995F-AC49E23816D7}"
+	ProjectSection(SolutionItems) = preProject
+		docker\build\cm\Dockerfile = docker\build\cm\Dockerfile
+		docker\build\cm\readme.md = docker\build\cm\readme.md
+		docker\build\cm\transforms\Web.config.xdt = docker\build\cm\transforms\Web.config.xdt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSSQL Init", "MSSQL Init", "{86F47A68-9B49-4E9B-A414-79A9C0A0DE74}"
+	ProjectSection(SolutionItems) = preProject
+		docker\build\mssql-init\Dockerfile = docker\build\mssql-init\Dockerfile
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Redis", "Redis", "{22927A27-A17D-4DD6-A463-67B6B4F93F07}"
+	ProjectSection(SolutionItems) = preProject
+		docker\build\redis\Dockerfile = docker\build\redis\Dockerfile
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{EB94F5FA-258E-4D7D-93B5-5DE88D70E4E8}"
+	ProjectSection(SolutionItems) = preProject
+		docker\build\solution\Dockerfile = docker\build\solution\Dockerfile
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solr Init", "Solr Init", "{380A59C4-71D5-4495-B3B4-0E9481702812}"
+	ProjectSection(SolutionItems) = preProject
+		docker\build\solr-init\Dockerfile = docker\build\solr-init\Dockerfile
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{2F1B6BE3-2D74-4A5B-B07A-28492E464948}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		down.ps1 = down.ps1
+		docker\clean.ps1 = docker\clean.ps1
+		init.ps1 = init.ps1
+		up.ps1 = up.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{71EB592C-647E-40E0-861F-AC56F2F03778}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{EC31A3DE-835D-453A-9601-4C10A7D1D614}"
+	ProjectSection(SolutionItems) = preProject
+		docker\tools\common\ShowLogo.psm1 = docker\tools\common\ShowLogo.psm1
+		docker\tools\common\UI.psm1 = docker\tools\common\UI.psm1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Local", "Local", "{AF3AD9B2-3326-471F-9F5D-19412817D914}"
+	ProjectSection(SolutionItems) = preProject
+		docker\tools\local\Init.psm1 = docker\tools\local\Init.psm1
+		docker\tools\local\Up.psm1 = docker\tools\local\Up.psm1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{9F4E9DD9-8E0B-4637-BD00-454086231A44}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Traefik", "Traefik", "{5B32327F-8218-48FB-AC28-A582503146E5}"
+	ProjectSection(SolutionItems) = preProject
+		docker\infrastructure\traefik\certs\.gitignore = docker\infrastructure\traefik\certs\.gitignore
+		docker\infrastructure\traefik\config\dynamic\certs_config.yaml = docker\infrastructure\traefik\config\dynamic\certs_config.yaml
+		docker\infrastructure\traefik\README.md = docker\infrastructure\traefik\README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +125,18 @@ Global
 		{533B37E4-764C-4DCA-B53C-D86319A58643}.Release|x64.Build.0 = Release|Any CPU
 		{533B37E4-764C-4DCA-B53C-D86319A58643}.Release|x86.ActiveCfg = Release|Any CPU
 		{533B37E4-764C-4DCA-B53C-D86319A58643}.Release|x86.Build.0 = Release|Any CPU
+		{D5EF6227-0F80-4F47-9594-EFA7A250E27C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5EF6227-0F80-4F47-9594-EFA7A250E27C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5EF6227-0F80-4F47-9594-EFA7A250E27C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D5EF6227-0F80-4F47-9594-EFA7A250E27C}.Debug|x64.Build.0 = Debug|Any CPU
+		{D5EF6227-0F80-4F47-9594-EFA7A250E27C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D5EF6227-0F80-4F47-9594-EFA7A250E27C}.Debug|x86.Build.0 = Debug|Any CPU
+		{D5EF6227-0F80-4F47-9594-EFA7A250E27C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5EF6227-0F80-4F47-9594-EFA7A250E27C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5EF6227-0F80-4F47-9594-EFA7A250E27C}.Release|x64.ActiveCfg = Release|Any CPU
+		{D5EF6227-0F80-4F47-9594-EFA7A250E27C}.Release|x64.Build.0 = Release|Any CPU
+		{D5EF6227-0F80-4F47-9594-EFA7A250E27C}.Release|x86.ActiveCfg = Release|Any CPU
+		{D5EF6227-0F80-4F47-9594-EFA7A250E27C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,5 +144,22 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{5470EE99-D5AE-440B-B3B5-DB3E3D6F7A7B} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{533B37E4-764C-4DCA-B53C-D86319A58643} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{8F392D03-A5FB-2796-EA84-D3F6243993F8} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{B6483905-3241-FE94-0DA0-C6B47A025D91} = {8F392D03-A5FB-2796-EA84-D3F6243993F8}
+		{D5EF6227-0F80-4F47-9594-EFA7A250E27C} = {B6483905-3241-FE94-0DA0-C6B47A025D91}
+		{E44D53A3-B81D-4EC2-9D27-0723357408D4} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{2C7D4C23-B2E2-4F36-8F63-3325F8F7C0BC} = {E44D53A3-B81D-4EC2-9D27-0723357408D4}
+		{DB88D69A-0A34-43E7-A0BC-4E21B8E46430} = {E44D53A3-B81D-4EC2-9D27-0723357408D4}
+		{3E7A0724-8930-4075-995F-AC49E23816D7} = {DB88D69A-0A34-43E7-A0BC-4E21B8E46430}
+		{86F47A68-9B49-4E9B-A414-79A9C0A0DE74} = {DB88D69A-0A34-43E7-A0BC-4E21B8E46430}
+		{22927A27-A17D-4DD6-A463-67B6B4F93F07} = {DB88D69A-0A34-43E7-A0BC-4E21B8E46430}
+		{EB94F5FA-258E-4D7D-93B5-5DE88D70E4E8} = {DB88D69A-0A34-43E7-A0BC-4E21B8E46430}
+		{380A59C4-71D5-4495-B3B4-0E9481702812} = {DB88D69A-0A34-43E7-A0BC-4E21B8E46430}
+		{2F1B6BE3-2D74-4A5B-B07A-28492E464948} = {E44D53A3-B81D-4EC2-9D27-0723357408D4}
+		{71EB592C-647E-40E0-861F-AC56F2F03778} = {E44D53A3-B81D-4EC2-9D27-0723357408D4}
+		{EC31A3DE-835D-453A-9601-4C10A7D1D614} = {71EB592C-647E-40E0-861F-AC56F2F03778}
+		{AF3AD9B2-3326-471F-9F5D-19412817D914} = {71EB592C-647E-40E0-861F-AC56F2F03778}
+		{9F4E9DD9-8E0B-4637-BD00-454086231A44} = {E44D53A3-B81D-4EC2-9D27-0723357408D4}
+		{5B32327F-8218-48FB-AC28-A582503146E5} = {9F4E9DD9-8E0B-4637-BD00-454086231A44}
 	EndGlobalSection
 EndGlobal

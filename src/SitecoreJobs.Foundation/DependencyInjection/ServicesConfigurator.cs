@@ -11,7 +11,7 @@ namespace SitecoreJobs.Foundation.DependencyInjection
     {
         public void Configure(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton(SitecoreJobSettings.Load());
+            serviceCollection.AddSingleton(provider => SitecoreJobSettings.Load());
             serviceCollection.AddSingleton<InMemoryJobStateStore>();
             serviceCollection.AddSingleton<IJobStateStore>(
                 provider => provider.GetRequiredService<InMemoryJobStateStore>());

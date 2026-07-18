@@ -20,7 +20,7 @@ services:
       - source: \\.\pipe\docker_engine\
         target: \\.\pipe\docker_engine\
         type: npipe
-      - ./traefik:C:/etc/traefik
+      - ./infrastructure/traefik:C:/etc/traefik
     depends_on:
       id:
         condition: service_healthy

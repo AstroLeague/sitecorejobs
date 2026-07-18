@@ -52,8 +52,10 @@ function Start-Docker {
 
 	Write-Host
 	Write-Host "Deploying latest code..." -ForegroundColor Green
-	Show-Command @'
-msbuild .\src\Build\HelixPublishingPipeline\HPP.Platform\HPP.Platform.csproj `
+	$msbuildPath = Resolve-MSBuildPath
+	Write-Host "Using MSBuild: $msbuildPath" -ForegroundColor Green
+	Show-Command @"
+& "$msbuildPath" .\src\Build\HelixPublishingPipeline\HPP.Platform\HPP.Platform.csproj `
 		 /maxCpuCount `
 		 /p:Configuration=debug `
 		 /p:DeployOnBuild=true `
@@ -62,8 +64,8 @@ msbuild .\src\Build\HelixPublishingPipeline\HPP.Platform\HPP.Platform.csproj `
 		 /detailedSummary:False `
 		 /verbosity:quiet `
 		 /clp:ErrorsOnly
-'@
-	msbuild .\src\Build\HelixPublishingPipeline\HPP.Platform\HPP.Platform.csproj `
+"@
+	& $msbuildPath .\src\Build\HelixPublishingPipeline\HPP.Platform\HPP.Platform.csproj `
 	 /p:Configuration=debug `
 	 /m `
 	 /p:DeployOnBuild=true `
@@ -81,20 +83,57 @@ msbuild .\src\Build\HelixPublishingPipeline\HPP.Platform\HPP.Platform.csproj `
 	Write-Host "Waiting for CM to become available..." -ForegroundColor Green
 	Show-Command "Invoke-RestMethod `"http://localhost:8079/api/http/routers/cm-secure@docker`""
 	$startTime = Get-Date
+	$status = $null
 	do {
 		Start-Sleep -Milliseconds 100
 		try {
 			$status = Invoke-RestMethod "http://localhost:8079/api/http/routers/cm-secure@docker"
 		} catch {
-			if ($_.Exception.Response.StatusCode.value__ -ne "404") {
+			if ($null -eq $_.Exception.Response -or $_.Exception.Response.StatusCode.value__ -ne 404) {
 				throw
 			}
 		}
-	} while ($status.status -ne "enabled" -and $startTime.AddSeconds(15) -gt (Get-Date))
-	if (-not $status.status -eq "enabled") {
-		$status
+	} while (($null -eq $status -or $status.status -ne "enabled") -and $startTime.AddSeconds(15) -gt (Get-Date))
+	if ($null -eq $status -or $status.status -ne "enabled") {
+		if ($null -ne $status) {
+			$status
+		}
 		Write-Error "Timeout waiting for Sitecore CM to become available via Traefik proxy. Check CM container logs."
 	}	
+}
+
+function Resolve-MSBuildPath {
+	$msbuildCommand = Get-Command msbuild -ErrorAction SilentlyContinue
+	if ($null -ne $msbuildCommand) {
+		return $msbuildCommand.Source
+	}
+
+	$knownPaths = @(
+		"${env:ProgramFiles}\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\MSBuild.exe",
+		"${env:ProgramFiles}\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe",
+		"${env:ProgramFiles}\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe",
+		"${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe",
+		"${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\MSBuild.exe",
+		"${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe",
+		"${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\MSBuild.exe",
+		"${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe"
+	)
+
+	foreach ($path in $knownPaths) {
+		if (Test-Path -Path $path -PathType Leaf) {
+			return $path
+		}
+	}
+
+	$vswherePath = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+	if (Test-Path -Path $vswherePath -PathType Leaf) {
+		$resolvedPath = & $vswherePath -latest -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe | Select-Object -First 1
+		if (-not [string]::IsNullOrWhiteSpace($resolvedPath) -and (Test-Path -Path $resolvedPath -PathType Leaf)) {
+			return $resolvedPath
+		}
+	}
+
+	throw "MSBuild was not found. Install Visual Studio Build Tools with the MSBuild and ASP.NET web build tools workloads, or add MSBuild.exe to PATH."
 }
 
 function Initialize-DockerBindMounts {

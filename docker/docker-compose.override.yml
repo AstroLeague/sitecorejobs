@@ -4,6 +4,7 @@ services:
     image: ${REGISTRY}${COMPOSE_PROJECT_NAME}-solution:${VERSION:-latest}
     build:
       context: ..
+      dockerfile: docker/build/solution/Dockerfile
       args:
         BUILD_CONFIGURATION: ${BUILD_CONFIGURATION}
         BUILD_IMAGE: mcr.microsoft.com/dotnet/framework/sdk:4.8-windowsservercore-ltsc2019
@@ -54,7 +55,7 @@ services:
 
   traefik:
     volumes:
-      - ./traefik:C:/etc/traefik
+      - ./infrastructure/traefik:C:/etc/traefik
     networks:
       default:
         ipv4_address: ${TRAEFIK_IP}

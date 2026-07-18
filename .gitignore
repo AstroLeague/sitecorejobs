@@ -62,6 +62,10 @@ packages/
 !/docker/deploy/**/.gitkeep
 /docker/mssql-data/
 /docker/solr-data/
+/docker/infrastructure/traefik/certs/*.pem
+/docker/infrastructure/traefik/certs/*.key
+/docker/infrastructure/traefik/certs/*.pfx
+/docker/infrastructure/traefik/certs/mkcert.exe
 /docker/traefik/certs/*.pem
 /docker/traefik/certs/*.key
 /docker/traefik/certs/*.pfx

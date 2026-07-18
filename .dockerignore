@@ -8,6 +8,7 @@ license
 docker/deploy
 docker/data
 docker/tools
+docker/infrastructure/traefik
 docker/traefik
 tests
 tools
